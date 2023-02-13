@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { ethers } = require('hardhat');
 
-const abi = require("../abi/"+process.env.ABI_NAME);
+const abi = require("../abi/DynamicSvgToken-WithAddress.json");
 
 async function mint(nonce) {
     const DynamicSvgToken = await ethers.getContractAt('DynamicSvgToken', abi.erc721_address);

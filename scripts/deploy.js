@@ -24,7 +24,7 @@ async function main() {
   jsonObj.erc721_address = erc721.address;
   jsonObj.erc721_abi = getAbi(erc721.interface);
 
-  await fs.writeFile(process.env.ABI_NAME, JSON.stringify(jsonObj, null, 4));
+  await fs.writeFile("abi/" + contractName + "-WithAddress.json", JSON.stringify(jsonObj, null, 4));
   await fs.writeFile("abi/" + contractName + ".json", JSON.stringify(jsonObj.erc721_abi, null, 4));
 }
 

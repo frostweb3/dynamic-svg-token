@@ -29,6 +29,7 @@ const sleep = (ms) => {
         const response = await receipt;
         const details = await response.wait();
         const evt = details.logs[0];
+
         const tokenId = evt.topics[3];
         const tokenURI = await DynamicSvgToken.tokenURI(tokenId);
 

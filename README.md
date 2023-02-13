@@ -20,7 +20,6 @@ which contains
 ENDPOINT=http://exampleendpoint
 PRIVATE_KEY=exampleprivatekey
 CONTRACT_ADDRESS=examplecontractaddress
-ABI_NAME=DynamicSvgToken-WithAddress.json
 ```
 
 ## Creating the private key

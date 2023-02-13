@@ -16,6 +16,8 @@ interface FileStorage {
 contract DynamicSvgToken is ERC721URIStorage {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenCounter;
+  
+  uint256 private constant CHUNK_SIZE = 4096;
 
   string[] palette;
 
@@ -47,7 +49,8 @@ contract DynamicSvgToken is ERC721URIStorage {
 
     _mint(msg.sender, newTokenId);
 
-    string memory tokenData = _constructTokenURI(newTokenId); 
+    string memory tokenData = _constructTokenURI(newTokenId);
+
     string memory tokenURI = _constructTokenURL(newTokenId, bytes(tokenData));
 
     _setTokenURI(newTokenId, tokenURI);
@@ -55,6 +58,8 @@ contract DynamicSvgToken is ERC721URIStorage {
 
   function _constructTokenURL(uint256 _tokenId, bytes memory _tokenData) internal returns(string memory) {
     string memory tokenId = string(abi.encodePacked(bytes32(_tokenId)));
+
+    // NOTE: after deployment, space must be reserved by the allocator for the chain, for the contract address
     // 1. Start upload
     fileStorage.startUpload(tokenId, _tokenData.length);
     // 2. Upload chunk
