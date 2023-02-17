@@ -2,16 +2,7 @@
     {
         "type": "constructor",
         "payable": false,
-        "inputs": [
-            {
-                "type": "address",
-                "name": "_fileStorageAddress"
-            },
-            {
-                "type": "string",
-                "name": "_fileStoragePrefix"
-            }
-        ]
+        "inputs": []
     },
     {
         "type": "event",
@@ -117,6 +108,25 @@
     },
     {
         "type": "function",
+        "name": "base64EncodedSVG",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "_randSeed"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "string",
+                "name": ""
+            }
+        ]
+    },
+    {
+        "type": "function",
         "name": "getApproved",
         "constant": true,
         "stateMutability": "view",
@@ -176,7 +186,12 @@
         "name": "mint",
         "constant": false,
         "payable": false,
-        "inputs": [],
+        "inputs": [
+            {
+                "type": "string",
+                "name": "_fsUrl"
+            }
+        ],
         "outputs": []
     },
     {

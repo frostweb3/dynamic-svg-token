@@ -4,17 +4,15 @@
 // You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
-const { ethers, hre } = require("hardhat");
+const { ethers } = require("hardhat");
 const { getAbi } = require('../tools/abi');
 const  { promises } = require("fs");
 const fs = promises;
-const FILE_STORAGE_ADDRESS = process.env.FILE_STORAGE_ADDRESS;
-const FILE_STORAGE_PREFIX = process.env.FILE_STORAGE_PREFIX;
 
 async function main() {
   const contractName = "DynamicSvgToken";
   const erc721Factory = await ethers.getContractFactory(contractName);
-  const erc721 = await erc721Factory.deploy(FILE_STORAGE_ADDRESS, FILE_STORAGE_PREFIX,);
+  const erc721 = await erc721Factory.deploy();
   await erc721.deployTransaction.wait();
   console.log("ERC721 Token DynamicSvgToken was deployed");
 

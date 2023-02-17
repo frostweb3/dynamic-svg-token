@@ -3,10 +3,10 @@ const { ethers } = require('hardhat');
 
 const abi = require("../abi/DynamicSvgToken-WithAddress.json");
 
-async function mint(nonce) {
+async function mint(nonce, fsUrl) {
     const DynamicSvgToken = await ethers.getContractAt('DynamicSvgToken', abi.erc721_address);
-
-    const res = DynamicSvgToken.mint({ nonce, gasLimit: 255000000 });
+ 
+    const res = DynamicSvgToken.mint(fsUrl, { nonce, gasLimit: 255000000 });
     return res;
 }
 
@@ -24,8 +24,16 @@ async function getTransactionCount() {
     return tx;
 }
 
+async function base64EncodedSVG(fsHash) {
+    const DynamicSvgToken = await ethers.getContractAt('DynamicSvgToken', abi.erc721_address);
+
+    const res = await DynamicSvgToken.base64EncodedSVG(fsHash);
+    return res;
+}
+
 module.exports = {
     mint,
     getTransactionCount,
-    tokenURI
+    tokenURI,
+    base64EncodedSVG
 };
