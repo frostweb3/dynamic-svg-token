@@ -186,7 +186,12 @@
         "name": "mint",
         "constant": false,
         "payable": false,
-        "inputs": [],
+        "inputs": [
+            {
+                "type": "string",
+                "name": "_fsUrl"
+            }
+        ],
         "outputs": []
     },
     {

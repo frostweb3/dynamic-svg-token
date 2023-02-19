@@ -1,5 +1,5 @@
 const DynamicSvgToken = require("./DynamicSvgToken");
-// const fs = require('fs');
+const fs = require('fs');
 const { isSourceFile } = require("typescript");
 
 const Filestorage = require('@skalenetwork/filestorage.js');
@@ -84,10 +84,14 @@ async function fetchFileStoragePath(fileName) {
         }
 
         const fsHash = await uploadFile();
+
+        sleep(15000);
       
-        let fsUrl = process.env.FILE_STORAGE_PREFIX + await fetchFileStoragePath(fsHash);
+        // let fsUrl = process.env.FILE_STORAGE_PREFIX + await fetchFileStoragePath(fsHash);
         // console.log({fsUrl});
         const nonce = initialNonce + idx;
+        // console.log( await DynamicSvgToken.approve('0x48a5dF5f9f069A6A41941EFcB19581cD008cb6De', 1));
+        // break;
         const receipt = DynamicSvgToken.mint(nonce, 'mycontent');
         const response = await receipt;
         const details = await response.wait();

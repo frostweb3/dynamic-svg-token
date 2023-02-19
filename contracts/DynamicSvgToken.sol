@@ -30,7 +30,7 @@ contract DynamicSvgToken is ERC721URIStorage {
 
 
   // function mint(string memory _fsUrl) external {
-  function mint() external {
+  function mint(string memory _fsUrl) external {
 
     _tokenCounter.increment();
 
@@ -38,7 +38,7 @@ contract DynamicSvgToken is ERC721URIStorage {
 
     _mint(msg.sender, newTokenId);
 
-    _setTokenURI(newTokenId, 'asdf');
+    _setTokenURI(newTokenId, _fsUrl);
   }
 
   // function _constructTokenURL(uint256 _tokenId, bytes memory _tokenData) internal returns(string memory) {
