@@ -88,7 +88,7 @@ async function fetchFileStoragePath(fileName) {
         let fsUrl = process.env.FILE_STORAGE_PREFIX + await fetchFileStoragePath(fsHash);
         // console.log({fsUrl});
         const nonce = initialNonce + idx;
-        const receipt = DynamicSvgToken.mint(nonce, fsUrl);
+        const receipt = DynamicSvgToken.mint(nonce, 'mycontent');
         const response = await receipt;
         const details = await response.wait();
         const evt = details.logs[0];
