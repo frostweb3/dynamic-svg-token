@@ -1,6 +1,5 @@
 const DynamicSvgToken = require("./DynamicSvgToken");
 const fs = require('fs');
-const { isSourceFile } = require("typescript");
 
 const Filestorage = require('@skalenetwork/filestorage.js');
 const Web3 = require('web3');
@@ -27,17 +26,17 @@ async function getSVGData() {
 
 async function uploadFile() {
   // 0. generate the fsHash
-  fsHash = crypto.randomBytes(16).toString('hex');;
+  fsHash = crypto.randomBytes(16).toString('hex');
   // 1. get the svg data ^ using the fsHash
   // console.log({fsHash});
-  const svgData = Buffer.from(await getSVGData(fsHash), "utf-8");;
+  const svgData = Buffer.from(await getSVGData(fsHash), "utf-8");
   // console.log({svgData});
 
   // 2. upload using fsHash and the data
-  console.log([ process.env.ACCOUNT_ADDRESS,
-    fsHash,
-    svgData,
-    process.env.PRIVATE_KEY]);
+  // console.log([ process.env.ACCOUNT_ADDRESS,
+  //   fsHash,
+  //   svgData,
+  //   process.env.PRIVATE_KEY]);
   await filestorage.uploadFile(
     process.env.ACCOUNT_ADDRESS,
     fsHash,
@@ -74,7 +73,7 @@ async function fetchFileStoragePath(fileName) {
       //Initialize the HTML boilerplate
       let fileContent = '<html><head></head><body>';
       
-      const initialNonce = await DynamicSvgToken.getTransactionCount();
+      // const initialNonce = await DynamicSvgToken.getTransactionCount();
 
 
       for (let idx = 0; idx < 2; idx++) {
@@ -84,24 +83,26 @@ async function fetchFileStoragePath(fileName) {
         }
 
         const fsHash = await uploadFile();
-
-        sleep(15000);
       
-        // let fsUrl = process.env.FILE_STORAGE_PREFIX + await fetchFileStoragePath(fsHash);
+        let fsUrl = process.env.FILE_STORAGE_PREFIX + await fetchFileStoragePath(fsHash);
         // console.log({fsUrl});
-        const nonce = initialNonce + idx;
+        // const nonce = initialNonce + idx;
         // console.log( await DynamicSvgToken.approve('0x48a5dF5f9f069A6A41941EFcB19581cD008cb6De', 1));
         // break;
-        const receipt = DynamicSvgToken.mint(nonce, 'mycontent');
+        const nonce = await DynamicSvgToken.getTransactionCount();
+        const receipt = DynamicSvgToken.mint(nonce, fsUrl);
         const response = await receipt;
         const details = await response.wait();
         const evt = details.logs[0];
 
         const tokenId = evt.topics[3];
         const tokenURI = await DynamicSvgToken.tokenURI(tokenId);
+        const tokenURIResponse = await fetch(tokenURI);
+        const tokenURIContents = await tokenURIResponse.text();
+        // console.log(Object.key(tokenURIContents));
 
         //Create an image tag
-        const image = `<h2>Token Id: ${tokenId}</h2><img src="${tokenURI}" />\n`;
+        const image = `<h2>Token Id: ${tokenId}</h2><img src="${tokenURIContents}" />\n`;
         //Append image to file content
         fileContent += image;
 
