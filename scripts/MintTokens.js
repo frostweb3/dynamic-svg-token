@@ -54,48 +54,45 @@ async function fetchFileStoragePath(fileName) {
   return file.storagePath.toLowerCase();
 }
 
-(async () => {
-  await mintTokens();
+async function mintTokens() {
+  try {
+    //Report generation: Start
+    let fileContent = '<html><head></head><body>';
 
-  async function mintTokens() {
-    try {
-      //Report generation: Start
-      let fileContent = '<html><head></head><body>';
-
-      for (let idx = 0; idx < MINT_AMOUNT; idx++) {
-        const fsHash = await uploadFile();
+    for (let idx = 0; idx < MINT_AMOUNT; idx++) {
+      const fsHash = await uploadFile();
+    
+      let fsUrl = process.env.FILE_STORAGE_PREFIX + await fetchFileStoragePath(fsHash);
       
-        let fsUrl = process.env.FILE_STORAGE_PREFIX + await fetchFileStoragePath(fsHash);
-        
-        const nonce = await DynamicSvgToken.getTransactionCount();
-        const receipt = DynamicSvgToken.mint(nonce, fsUrl);
-        const response = await receipt;
-        const details = await response.wait();
-        // The rest of this function concerns report generation and logging
-        const evt = details.logs[0];
+      const nonce = await DynamicSvgToken.getTransactionCount();
+      const receipt = DynamicSvgToken.mint(nonce, fsUrl);
+      const response = await receipt;
+      const details = await response.wait();
+      // The rest of this function concerns report generation and logging
+      const evt = details.logs[0];
 
-        const tokenId = evt.topics[3];
-        const tokenURI = await DynamicSvgToken.tokenURI(tokenId);
-        const tokenURIResponse = await fetch(tokenURI);
-        const tokenURIContents = await tokenURIResponse.text();
+      const tokenId = evt.topics[3];
+      const tokenURI = await DynamicSvgToken.tokenURI(tokenId);
+      const tokenURIResponse = await fetch(tokenURI);
+      const tokenURIContents = await tokenURIResponse.text();
 
-        //Report generation: Generating a single image
-        const image = `<h2>Token Id: ${tokenId}</h2><img src="${tokenURIContents}" />\n`;
-        //Report generation: Appending image to file content
-        fileContent += image;
-      }
-      console.log(`${MINT_AMOUNT} txs sent to the SKALE chain!`);
-      console.log("Let's go to block explorer to see them");
-
-
-      //Report generation: Closing the HTML file
-      fileContent += '</body></html>';
-      
-      //Report generation: Write report to file
-      fs.writeFile('result.html', fileContent, (err) => { if (err) throw err; })
-      console.log('The resulting SVGs are to be viewed in `result.html`');
-    } catch (err) {
-      console.log("Looks like something went wrong!", err);
+      //Report generation: Generating a single image
+      const image = `<h2>Token Id: ${tokenId}</h2><img src="${tokenURIContents}" />\n`;
+      //Report generation: Appending image to file content
+      fileContent += image;
     }
+    console.log(`${MINT_AMOUNT} txs sent to the SKALE chain!`);
+    console.log("Let's go to block explorer to see them");
+
+
+    //Report generation: Closing the HTML file
+    fileContent += '</body></html>';
+    
+    //Report generation: Write report to file
+    fs.writeFile('result.html', fileContent, (err) => { if (err) throw err; })
+    console.log('The resulting SVGs are to be viewed in `result.html`');
+  } catch (err) {
+    console.log("Looks like something went wrong!", err);
   }
-})();
+}
+(async () => { await mintTokens();})();
