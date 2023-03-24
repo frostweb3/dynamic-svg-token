@@ -27,10 +27,10 @@ function getGasPrice(gasPrice) {
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.17",
+  solidity: "0.8.19",
   defaultNetwork: "hardhat",
   solidity: {
-      version: '0.8.17',
+      version: '0.8.19',
       settings: {
           optimizer: {
               enabled: true,

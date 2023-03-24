@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.17;
+pragma solidity 0.8.19;
 
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
@@ -28,8 +28,6 @@ contract DynamicSvgToken is ERC721URIStorage {
     palette.push("olive");
   }
 
-
-  // function mint(string memory _fsUrl) external {
   function mint(string memory _fsUrl) external {
 
     _tokenCounter.increment();
@@ -40,33 +38,6 @@ contract DynamicSvgToken is ERC721URIStorage {
 
     _setTokenURI(newTokenId, _fsUrl);
   }
-
-  // function _constructTokenURL(uint256 _tokenId, bytes memory _tokenData) internal returns(string memory) {
-  //   string memory tokenId = string(abi.encodePacked(bytes32(_tokenId)));
-
-  //   // NOTE: after deployment, space must be reserved by the allocator for the chain, for the contract address
-  //   // 1. Start upload
-  //   fileStorage.startUpload(tokenId, _tokenData.length);
-  //   // 2. Upload chunk
-  //   fileStorage.uploadChunk(tokenId, 0, _tokenData);
-  //   // 3. Finish the upload 
-  //   fileStorage.finishUpload(tokenId);
-
-  //   return string(abi.encodePacked(
-  //     fileStoragePrefix,
-  //     abi.encodePacked(address(msg.sender)),
-  //     "/",
-  //     tokenId
-  //   ));
-  // }
-
-  // function _constructTokenURI(uint256 tokenId) internal view returns (string memory) {
-  //   string memory svg = _constructSVG(tokenId);
-    
-  //   string memory json = Base64.encode(bytes(string(abi.encodePacked('{"name": "', name(),'", "description": "A dynamic SVG", "image_data": "', bytes(svg), '"}'))));
-    
-  //   return string(abi.encodePacked('data:application/json;base64,', json));
-  // }
 
   function base64EncodedSVG(uint256 _randSeed) public view returns (string memory) {
     string memory svg = generateSVG(_randSeed);

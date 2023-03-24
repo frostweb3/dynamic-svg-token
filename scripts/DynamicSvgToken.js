@@ -31,14 +31,6 @@ async function base64EncodedSVG(fsHash) {
     return res;
 }
 
-// TODO: nuke this, debugging 
-async function approve(address, tokenId) {
-    const DynamicSvgToken = await ethers.getContractAt('DynamicSvgToken', abi.erc721_address);
-
-    const res = await DynamicSvgToken.approve(address, tokenId);
-    return res;
-}
-
 module.exports = {
     mint,
     getTransactionCount,
