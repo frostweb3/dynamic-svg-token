@@ -35,6 +35,5 @@ module.exports = {
     mint,
     getTransactionCount,
     tokenURI,
-    base64EncodedSVG,
-    approve
+    base64EncodedSVG
 };

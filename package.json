@@ -1,7 +1,7 @@
 {
-  "name": "gaming_token",
+  "name": "dynamic_svg_token",
   "version": "1.0.0",
-  "description": "Gaming token ERC-721",
+  "description": "Dynamic SVG token ERC-721",
   "main": "index.js",
   "scripts": {
     "createWallet": "node scripts/createWallet.js",

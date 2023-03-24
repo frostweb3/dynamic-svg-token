@@ -10,6 +10,7 @@ let web3 = new Web3(web3Provider);
 
 const filestorage = new Filestorage(web3, true);
 
+const MINT_AMOUNT = 10;
 
 const crypto = require("crypto");
 
@@ -58,15 +59,10 @@ async function fetchFileStoragePath(fileName) {
 
   async function mintTokens() {
     try {
-      //Initialize the HTML boilerplate
+      //Report generation: Start
       let fileContent = '<html><head></head><body>';
 
-      for (let idx = 0; idx < 2; idx++) {
-        if (idx % 20 === 0 && idx > 0) {
-          console.log("Sent", idx, "txs");
-          await sleep(2000);
-        }
-
+      for (let idx = 0; idx < MINT_AMOUNT; idx++) {
         const fsHash = await uploadFile();
       
         let fsUrl = process.env.FILE_STORAGE_PREFIX + await fetchFileStoragePath(fsHash);
@@ -75,6 +71,7 @@ async function fetchFileStoragePath(fileName) {
         const receipt = DynamicSvgToken.mint(nonce, fsUrl);
         const response = await receipt;
         const details = await response.wait();
+        // The rest of this function concerns report generation and logging
         const evt = details.logs[0];
 
         const tokenId = evt.topics[3];
@@ -82,19 +79,20 @@ async function fetchFileStoragePath(fileName) {
         const tokenURIResponse = await fetch(tokenURI);
         const tokenURIContents = await tokenURIResponse.text();
 
-        //Create an image tag
+        //Report generation: Generating a single image
         const image = `<h2>Token Id: ${tokenId}</h2><img src="${tokenURIContents}" />\n`;
-        //Append image to file content
+        //Report generation: Appending image to file content
         fileContent += image;
       }
-      console.log("100 txs sent to the SKALE chain!");
+      console.log(`${MINT_AMOUNT} txs sent to the SKALE chain!`);
       console.log("Let's go to block explorer to see them");
-      //Append the </body> and </html> tags
+
+
+      //Report generation: Closing the HTML file
       fileContent += '</body></html>';
       
-      // //Write file contents to the file
+      //Report generation: Write report to file
       fs.writeFile('result.html', fileContent, (err) => { if (err) throw err; })
-      
       console.log('The resulting SVGs are to be viewed in `result.html`');
     } catch (err) {
       console.log("Looks like something went wrong!", err);
